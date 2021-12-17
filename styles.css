@@ -1,0 +1,38 @@
+body{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    font-family:Arial, Helvetica, sans-serif ;
+}
+h1{
+    color:white;
+}
+.one{
+    margin:20px;
+    padding:50px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    border:1px solid white;
+}
+.one input{
+    margin: 10px;
+    padding: 10px;
+    font-size: larger;
+}
+.one button{
+    padding:10px;
+    margin:10px;
+}
+h3{
+    border:1px solid white;
+    color:white;
+    padding:10px;
+    height:30px;
+}
+.one p{
+    color:red;
+    align-self: center;
+}
