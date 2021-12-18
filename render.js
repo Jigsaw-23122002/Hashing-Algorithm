@@ -18,3 +18,9 @@ ipcRenderer.on('generatedOriginalPassword',(event,data)=>{
     const spaceForOriginalPassword=document.querySelector('#spaceForOriginalPassword');
     spaceForOriginalPassword.innerText=data;
 })
+
+ipcRenderer.on('databaseTable',(event,data)=>{
+    console.log(data);
+    const DatabaseData=document.querySelector('#DatabaseData');
+    DatabaseData.innerText=data;
+})

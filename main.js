@@ -63,7 +63,12 @@ app.whenReady().then(()=>{
                 {
                     label:"Encrypted Passwords Database",
                     click:function(){
-                        
+                        Hashed.find().then((databaseContents)=>{
+                            win.loadFile("Database.html").then(()=>{
+                                console.log(databaseContents);
+                                win.webContents.send('databaseTable',databaseContents);
+                            })
+                        })
                     }
                 }
             ]
