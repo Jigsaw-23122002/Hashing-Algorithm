@@ -4,6 +4,7 @@ const electron=require('electron');
 const app=electron.app;
 const browserWindow=electron.BrowserWindow;
 const ipcMain=electron.ipcMain;
+const Menu=electron.Menu;
 const mongoose=require('mongoose');
 
 const MongoDB_Url=mongoose.connect("mongodb+srv://JIGSAW:JIGSAW123@cluster0.rrmrh.mongodb.net/HashGenerator?retryWrites=true&w=majority");
@@ -11,7 +12,7 @@ const Hashed=require('./Hashed_Modal');
 
 let win=null;
 
-function CreateWindow(){
+function Encrypt(){
     win=new browserWindow({
         width:"1100",
         height:"600",
@@ -23,10 +24,54 @@ function CreateWindow(){
 
     win.webContents.openDevTools();
 
-    win.loadFile("index.html");
+    win.loadFile("Encryption.html");
 }
 
-app.whenReady().then(CreateWindow);
+function Decrypt(){
+    win.loadFile("Decryption.html");
+}
+
+app.whenReady().then(()=>{
+    Encrypt();
+
+    const template=[
+        {
+            label:"Encryption",
+            submenu:[
+                {
+                    label:"Encrypting the passwords",
+                    click:function(){
+                        win.loadFile("Encryption.html");
+                    }
+                }
+            ]
+        },
+        {
+            label:"Decryption",
+            submenu:[
+                {
+                    label:"Decrypting the passwords",
+                    click:function(){
+                        win.loadFile("Decryption.html");
+                    }
+                }
+            ]
+        },
+        {
+            label:"Database",
+            submenu:[
+                {
+                    label:"Encrypted Passwords Database",
+                    click:function(){
+                        
+                    }
+                }
+            ]
+        }
+    ]
+    const menu=Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
+});
 
 ipcMain.on('generatePassword',(event,data)=>{
 
@@ -34,10 +79,10 @@ ipcMain.on('generatePassword',(event,data)=>{
 
     Hashed.find({Username:data[1]}).then((dataGot)=>{
         console.log(dataGot);
-        if(dataGot===null){
+        if(dataGot.length!==0){
             console.log("User Exists.")
             win.webContents.send('generatedPassword',"Username Already Exists.");
-        }
+        } 
         else{
             let password=data[0];
             let hashedPassword="";
@@ -81,24 +126,29 @@ ipcMain.on('generatePassword',(event,data)=>{
                 Decoder:decoder1    
             })
             Database.save();
-
             console.log(hashedPassword);
-
-            let originalPassword="";
-            for(let i=0;i<hashedPassword.length;i++){
-                let sum=0;
-                while(hashedPassword[i]!=='#'){
-                    let a=decoder1.charCodeAt(i)-33;
-                    sum=sum*10+a;   
-                    i++;
-                }
-                originalPassword=originalPassword+String.fromCharCode(sum);
-            }
-            console.log(originalPassword);
-
             win.webContents.send('generatedPassword',hashedPassword);
         }
+    })  
+})
+ipcMain.on('fetchOriginalPassword',(event,data)=>{
+    Hashed.findOne({Username:data}).then((datas)=>{
+        if(datas!==null){
+            let originalPassword="";
+                for(let i=0;i<datas.HashedPassword.length;i++){
+                    let sum=0;
+                    while(datas.HashedPassword[i]!=='#'){
+                        let a=datas.Decoder.charCodeAt(i)-33;
+                        sum=sum*10+a;   
+                        i++;
+                    }
+                    originalPassword=originalPassword+String.fromCharCode(sum);
+                }
+                console.log(originalPassword);
+                win.webContents.send('generatedOriginalPassword',originalPassword);
+            }
+        else{
+            win.webContents.send('generatedOriginalPassword',"No Encryption is done for this Username.");
+        }
     })
-
-    
 })

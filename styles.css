@@ -36,3 +36,24 @@ h3{
     color:red;
     align-self: center;
 }
+.two p{
+    color:red;
+    align-self: center;
+}
+.two input{
+    margin: 10px;
+    padding: 10px;
+    font-size: larger;
+}
+.two{
+    margin:20px;
+    padding:50px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    border:1px solid white;   
+}
+.two button{
+    padding:10px;
+    margin:10px;
+}
