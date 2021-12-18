@@ -5,7 +5,9 @@ const app=electron.app;
 const browserWindow=electron.BrowserWindow;
 const ipcMain=electron.ipcMain;
 const Menu=electron.Menu;
+const MenuItem=electron.MenuItem;
 const mongoose=require('mongoose');
+const globalShortcut=electron.globalShortcut;
 
 const MongoDB_Url=mongoose.connect("mongodb+srv://JIGSAW:JIGSAW123@cluster0.rrmrh.mongodb.net/HashGenerator?retryWrites=true&w=majority");
 const Hashed=require('./Hashed_Modal');
@@ -40,6 +42,7 @@ app.whenReady().then(()=>{
             submenu:[
                 {
                     label:"Encrypting the passwords",
+                    accelerator:"Ctrl + Shift + e",
                     click:function(){
                         win.loadFile("Encryption.html");
                     }
@@ -51,6 +54,7 @@ app.whenReady().then(()=>{
             submenu:[
                 {
                     label:"Decrypting the passwords",
+                    accelerator:"Ctrl + Shift + d",
                     click:function(){
                         win.loadFile("Decryption.html");
                     }
@@ -62,6 +66,7 @@ app.whenReady().then(()=>{
             submenu:[
                 {
                     label:"Encrypted Passwords Database",
+                    accelerator:"Ctrl + Shift + b",
                     click:function(){
                         Hashed.find().then((databaseContents)=>{
                             win.loadFile("Database.html").then(()=>{
@@ -72,11 +77,48 @@ app.whenReady().then(()=>{
                     }
                 }
             ]
+        },
+        {
+            label:"More",
+            submenu:[
+                {
+                    label:"Like this project on GitHub",
+                    accelerator:"Ctrl + G", 
+                    click:function(){
+                        electron.shell.openExternal("https://github.com/Jigsaw-23122002/Hashing-Algorithm");
+                    },
+                },
+                {role:"undo"},
+                {role:"redo"},
+                {role:"copy"},
+                {role:"selectall"}
+            ]
         }
     ]
     const menu=Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu);
+
+    const ctxMenu=new Menu();
+    ctxMenu.append(new MenuItem({
+        label:"Github Repository",
+        accelerator:"Ctrl + G",
+        click:function(){
+            electron.shell.openExternal("https://github.com/Jigsaw-23122002/Hashing-Algorithm");
+        }
+    }));
+    win.webContents.on('context-menu',function(event,params){
+        ctxMenu.popup(win,params.x,params.y);
+    })
+
+    globalShortcut.register("Alt + 1",function(){
+        win.show();
+    });
+
 });
+
+app.on('will-quit',()=>{
+    globalShortcut.unregisterAll();
+})
 
 ipcMain.on('generatePassword',(event,data)=>{
 
