@@ -17,8 +17,8 @@ let win=null;
 
 function Encrypt(){
     win=new browserWindow({
-        width:"1100",
-        height:"600",
+        width:"1800",
+        height:"1000",
         resizable:true,
         webPreferences:{
             nodeIntegration:true
