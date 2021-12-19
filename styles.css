@@ -57,3 +57,10 @@ h3{
     padding:10px;
     margin:10px;
 }
+#DatabaseData{
+    color:white;
+}
+#DB{
+    padding:20px;
+    border:1px solid white;
+}
