@@ -8,8 +8,9 @@ const Menu=electron.Menu;
 const MenuItem=electron.MenuItem;
 const mongoose=require('mongoose');
 const globalShortcut=electron.globalShortcut;
+require('dotenv').config();
 
-const MongoDB_Url=mongoose.connect("mongodb+srv://JIGSAW:JIGSAW123@cluster0.rrmrh.mongodb.net/HashGenerator?retryWrites=true&w=majority");
+mongoose.connect(process.env.MONGOURL);
 const Hashed=require('./Hashed_Modal');
 
 let win=null;
