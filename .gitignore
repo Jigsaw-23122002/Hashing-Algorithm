@@ -2,3 +2,4 @@ node_modules
 Exp_ContextMenu.txt
 Exp_Accelerator.txt
 Exp_ShellModule.txt
+.env
