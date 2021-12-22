@@ -123,8 +123,6 @@ app.on('will-quit',()=>{
 
 ipcMain.on('generatePassword',(event,data)=>{
 
-    console.log(data);
-
     Hashed.find({Username:data[1]}).then((dataGot)=>{
         console.log(dataGot);
         if(dataGot.length!==0){
@@ -192,7 +190,6 @@ ipcMain.on('fetchOriginalPassword',(event,data)=>{
                     }
                     originalPassword=originalPassword+String.fromCharCode(sum);
                 }
-                console.log(originalPassword);
                 win.webContents.send('generatedOriginalPassword',originalPassword);
             }
         else{

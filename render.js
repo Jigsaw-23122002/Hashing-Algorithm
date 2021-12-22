@@ -27,6 +27,6 @@ ipcRenderer.on('generatedOriginalPassword',(event,data)=>{
 ipcRenderer.on('databaseTable',(event,data)=>{
     const DatabaseData=document.querySelector('#DatabaseData')
     for(let i=0;i<data.length;i++){
-        DatabaseData.innerText=DatabaseData.innerText+`${i} ) ${data[i]._doc.Username} ------ ${data[i]._doc.HashedPassword} \n`;
+        DatabaseData.innerText=DatabaseData.innerText+`${i+1} ) ${data[i]._doc.Username} ------ ${data[i]._doc.HashedPassword} \n`;
     }
 })
